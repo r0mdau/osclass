@@ -3,22 +3,22 @@ version: '2'
 services:
 
   apache-osclass:
-    image: multirepo-oab.si.fr.intraorange:5002/itapp/stretch/apache2-php7
+    image: r0mdau/stretch-apache2-php7
     environment:
       - VIRTUAL_HOST=osclass.dev
     volumes:
       - ./:/srv/osclass
       - ./osclass.dev.conf:/etc/apache2/sites-enabled/osclass.dev.conf
     links:
-      - database-osclass
+      - database
     network_mode: "bridge"
 
-  database-osclass:
-    image: mariadb:10.0.28
+  database:
+    image: mariadb
     environment:
       MYSQL_ROOT_PASSWORD: test
     volumes:
-      - ../data:/var/lib/mysql
+      - ./data:/var/lib/mysql
     ports:
       - 3306:3306
     network_mode: "bridge"
@@ -28,5 +28,5 @@ services:
     environment:
       - VIRTUAL_HOST=phpmyadmin.local
     links:
-      - database-osclass:db
+      - database:db
     network_mode: "bridge"
